@@ -2,7 +2,6 @@ from typing import List
 import math
 import random
 import matplotlib.pyplot as plt
-from mpl_toolkits import mplot3d
 import time
 
 def euclideanDistance(p1, p2):
@@ -39,7 +38,7 @@ def distanceOf3(P):
             # Distance between P[1] and P[2] is smallest
             return d12, P[1], P[2]
             
-def findClosestPair(P: List, n: int):
+def closestPairDNC(P: List, n: int):
 # Base case when there are only two points
     # P = P.sort(key=lambda x: x[0])
     P = sorted(P, key=lambda x: x[0])
@@ -54,8 +53,8 @@ def findClosestPair(P: List, n: int):
     S1 = P[:(mid+(n%2))]
     S2 = P[(mid+(n%2)):]
     # Recursive calls to find the closest pair in each half
-    d1, p1, p2 = findClosestPair(S1, mid+(n%2))
-    d2, q1, q2 = findClosestPair(S2, n-(mid+(n%2)))
+    d1, p1, p2 = closestPairDNC(S1, mid+(n%2))
+    d2, q1, q2 = closestPairDNC(S2, n-(mid+(n%2)))
     d, p1, p2 = (d1, p1, p2) if d1 < d2 else (d2, q1, q2)
     # Find the minimum distance between the two halves
     d = min(d1, d2)
@@ -104,20 +103,23 @@ def inputRandom(count, dimension, minVal, maxVal):
     print("Titik-titik hasil input acak telah disimpan dalam file input.txt.")
     return vectorList
 
-def findClosestPairES(P):
+def closestPairBruteForce(P):
+    # Calculate the length of the input list
     n = len(P)
+    # Set initial values for the best distance and best pair
     best_dist = float('inf')
     best_pair = None
+    # Loop through all pairs of points and calculate their distance
     for i in range(n):
         for j in range(i+1, n):
             dist = euclideanDistance(P[i], P[j])
+            # If the distance between the pair of points is less than the best distance,
+            # update the best distance and best pair
             if dist < best_dist:
                 best_dist = dist
                 best_pair = (P[i], P[j])
-                
-    print(f"Jarak terdekat Brute Force: {best_dist:.2f}")
-    print(f"Pasangan titik terdekat Brute Force: {best_pair}")
-    # return best_pair, best_dist
+    # Return the best distance and the two points that form the best pair
+    return best_dist, best_pair[0], best_pair[1]
 
 def show3d(vectorList, res1, res2):
     # create 3D object axes
@@ -152,49 +154,73 @@ def show2d(vectorList, res1, res2):
     plt.show()
 
 if __name__ == "__main__":
-    count = int(input("Masukkan jumlah tuple: "))
-    dimension = int(input("Masukkan dimensi vektor: "))
-    minVal = int(input("Masukkan nilai minimum: "))
-    maxVal = int(input("Masukkan nilai maksimum: "))
+    print("\033[1;31m" + "=================================================" + "\033[0m")
+    print("\033[1;32m" + "          CLOSEST PAIR PROBLEM SOLVER           " + "\033[0m")
+    print("\033[1;31m" + "             M. Rifqi F / 13521166              " + "\033[0m")
+    print("\033[1;31m" + "=================================================" + "\033[0m")
+
+    print("\033[1;33m")
+    count = int(input(">> Masukkan jumlah tuple: "))
+    dimension = int(input(">> Masukkan dimensi vektor: "))
+    print("\033[0m")
+
+    print("\033[1;34m")
+    minVal = int(input(">> Masukkan nilai minimum: "))
+    maxVal = int(input(">> Masukkan nilai maksimum: "))
+    print("\033[0m")
+
     while(minVal >= maxVal):
         print("Nilai minimum harus lebih kecil dari nilai maksimum!")
-        minVal = int(input("Masukkan nilai minimum: "))
-        maxVal = int(input("Masukkan nilai maksimum: "))
+        print("\033[1;34m")
+        minVal = int(input(">> Masukkan nilai minimum: "))
+        maxVal = int(input(">> Masukkan nilai maksimum: "))
+        print("\033[0m")
+
     vectorList = inputRandom(count, dimension, minVal, maxVal)
     
+    # DIVIDE AND CONQUER
     # catat waktu awal
     start_time = time.time()
-    
-    d, res1, res2 = findClosestPair(vectorList, count)
-    
+    d, res1, res2 = closestPairDNC(vectorList, count)
     # catat waktu selesai
     end_time = time.time()
-
     # hitung selisih waktu
     total_time = end_time - start_time
-
+    print("\033[1;32m")
     print(f"Jarak terdekat Divide and Conquer: {d:.2f}")
-    print(f"Pasangan titik terdekat Divide and Conquer: {res1}, {res2}\n")
+    print(f"Pasangan titik terdekat Divide and Conquer: {res1}, {res2}")
     print("Waktu yang diperlukan Divide and Conquer:", total_time, "detik")
+    print("\033[0m")
 
-    # d = cari_distance_terdekat(vectorList)
-    # print(d)
-
+    print("\033[1;31m" + "=================================================" + "\033[0m")
+    # BRUTO FORCE
     # catat waktu awal
     start_time = time.time()
-
-    findClosestPairES(vectorList)
-
+    best_dist, res1, res2 = closestPairBruteForce(vectorList)
     # catat waktu selesai
     end_time = time.time()
-
     # hitung selisih waktu
     total_time = end_time - start_time
-
+    print("\033[1;31m")
+    print(f"Jarak terdekat Brute Force: {best_dist:.2f}")
+    print(f"Pasangan titik terdekat Brute Force: {res1, res2}")
     print("Waktu yang diperlukan Brute Force:", total_time, "detik")
+    print("\033[0m")
+    print("\033[1;31m" + "=================================================" + "\033[0m")
+    if(dimension == 3 | dimension == 2):
+        print("\033[1;33m")
+        show = input(">> Apakah Anda ingin menampilkan grafik? (y/n): ")
+        print("\033[0m")
+        while(show != "y" and show != "n"):
+            print("Input tidak valid!")
+            print("\033[1;33m")
+            show = input(">> Apakah Anda ingin menampilkan grafik? (y/n): ")
+            print("\033[0m")
+        if(show == "y"):
+            if (dimension == 3):
+                show3d(vectorList, res1, res2)
+            if (dimension == 2):
+                show2d(vectorList, res1, res2)
+        else:
+            print("Grafik tidak ditampilkan.")
 
-    if (dimension == 3):
-        show3d(vectorList, res1, res2)
-    
-    if (dimension == 2):
-        show2d(vectorList, res1, res2)
