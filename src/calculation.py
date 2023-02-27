@@ -117,6 +117,4 @@ def inputRandom(count, dimension, minVal, maxVal):
                     outFile.write(str(component))
             outFile.write("\n")
             i += 1
-    # print a message to inform the user that the generated vectors have been saved to "input.txt"
-    print("Titik-titik hasil input acak telah disimpan dalam file input.txt.")
     return vectorList
