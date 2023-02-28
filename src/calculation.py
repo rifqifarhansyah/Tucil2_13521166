@@ -39,12 +39,18 @@ def distanceOf3(P, counterDivideAndConquer):
         else: 
             # Distance between P[1] and P[2] is smallest
             return d12, P[1], P[2]
+        
+def manualSort(P):
+    # Manually sort the points in the list by x-coordinate
+    for i in range(len(P)):
+        for j in range(i+1, len(P)):
+            if P[i][0] > P[j][0]:
+                P[i], P[j] = P[j], P[i]
+    return P
             
 def closestPairDNC(P: List, n: int, counterDivideAndConquer):
-# Base case when there are only two points
-    # P = P.sort(key=lambda x: x[0])
-    P = sorted(P, key=lambda x: x[0])
-    # print(P)
+    # Base case when there are only two points
+    P = manualSort(P)
     if n == 2:
         d = euclideanDistance(P[0], P[1])
         counterDivideAndConquer[0] += 1
@@ -62,18 +68,21 @@ def closestPairDNC(P: List, n: int, counterDivideAndConquer):
     # Find the minimum distance between the two halves
     d = min(d1, d2)
     # Check for closest pair across the two halves
-    # result = []
     closest_pair = (d, p1, p2)
     strip = []
     for i in range(n):
         if abs(P[i][0] - P[mid+(n%2)][0]) < d:
             strip.append(P[i])
-    strip.sort(key=lambda x: x[1])
+    # Manually sort the points in the strip by y-coordinate
+    for i in range(len(strip)):
+        for j in range(i+1, len(strip)):
+            if strip[i][1] > strip[j][1]:
+                strip[i], strip[j] = strip[j], strip[i]
     size = len(strip)
     for i in range(size):
         for j in range(i+1, size):
             if strip[j][1] - strip[i][1] >= d:
-                continue
+                break
             else:
                 distance = euclideanDistance(strip[i],strip[j])
                 counterDivideAndConquer[0] += 1

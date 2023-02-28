@@ -5,14 +5,14 @@ Nilai minimum			: -1000
 Nilai maksimum			: 1000
 ==================================================================================================
                                         Divide and Conquer
-Jarak terdekat			: 20.62
-Pasangan titik terdekat	: (-894, 670, -63), (-892, 685, -49)
-Jumlah operasi			: 4578
-Waktu yang diperlukan	: 0.01202535629272461 detik
+Jarak terdekat			: 14.00
+Pasangan titik terdekat	: (932, 610, -146), (938, 614, -134)
+Jumlah operasi			: 4369
+Waktu yang diperlukan	: 0.09284591674804688 detik
 ==================================================================================================
                                             Brute Force 
-Jarak terdekat			: 20.62
-Pasangan titik terdekat	: ((-894, 670, -63), (-892, 685, -49))
+Jarak terdekat			: 14.00
+Pasangan titik terdekat	: ((932, 610, -146), (938, 614, -134))
 Jumlah operasi			: 499500
-Waktu yang diperlukan	: 0.5400395393371582 detik
+Waktu yang diperlukan	: 0.5523905754089355 detik
 ==================================================================================================
