@@ -1,8 +1,5 @@
-from typing import List
-import math
-import random
 import matplotlib.pyplot as plt
-import time
+
 
 def show3d(vectorList, res1, res2):
     # create 3D object axes
@@ -42,3 +39,4 @@ def show2d(vectorList, res1, res2):
     ax.set_xlabel('Sumbu-X') # Adding x-axis label
     ax.set_ylabel('SUmbu-Y') # Adding y-axis label
     plt.show()
+    

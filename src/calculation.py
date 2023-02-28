@@ -1,8 +1,7 @@
 from typing import List
 import math
 import random
-import matplotlib.pyplot as plt
-import time
+import os
 
 def euclideanDistance(p1, p2):
     # Initialize sum to zero
@@ -17,11 +16,14 @@ def euclideanDistance(p1, p2):
     distance = math.sqrt(sum)
     return distance
 
-def distanceOf3(P):
+def distanceOf3(P, counterDivideAndConquer):
     # Calculate the distances between each pair of points using the Euclidean distance function
     d01 = euclideanDistance(P[0], P[1])
+    counterDivideAndConquer[0] += 1
     d02 = euclideanDistance(P[0], P[2])
+    counterDivideAndConquer[0] += 1
     d12 = euclideanDistance(P[1], P[2])
+    counterDivideAndConquer[0] += 1
     # Compare the distances to find the minimum distance and the corresponding points
     if (d01 < d02):
         if (d01 < d12):
@@ -38,23 +40,24 @@ def distanceOf3(P):
             # Distance between P[1] and P[2] is smallest
             return d12, P[1], P[2]
             
-def closestPairDNC(P: List, n: int):
+def closestPairDNC(P: List, n: int, counterDivideAndConquer):
 # Base case when there are only two points
     # P = P.sort(key=lambda x: x[0])
     P = sorted(P, key=lambda x: x[0])
     # print(P)
     if n == 2:
         d = euclideanDistance(P[0], P[1])
+        counterDivideAndConquer[0] += 1
         return d, P[0], P[1]
     if n == 3:
-        return distanceOf3(P)
+        return distanceOf3(P, counterDivideAndConquer)
     # Divide the set into two halves
     mid = n // 2
     S1 = P[:(mid+(n%2))]
     S2 = P[(mid+(n%2)):]
     # Recursive calls to find the closest pair in each half
-    d1, p1, p2 = closestPairDNC(S1, mid+(n%2))
-    d2, q1, q2 = closestPairDNC(S2, n-(mid+(n%2)))
+    d1, p1, p2 = closestPairDNC(S1, mid+(n%2), counterDivideAndConquer)
+    d2, q1, q2 = closestPairDNC(S2, n-(mid+(n%2)), counterDivideAndConquer)
     d, p1, p2 = (d1, p1, p2) if d1 < d2 else (d2, q1, q2)
     # Find the minimum distance between the two halves
     d = min(d1, d2)
@@ -73,6 +76,7 @@ def closestPairDNC(P: List, n: int):
                 continue
             else:
                 distance = euclideanDistance(strip[i],strip[j])
+                counterDivideAndConquer[0] += 1
                 d = min(d, distance)
                 if (d == distance):
                     closest_pair = (d,strip[i],strip[j])
@@ -97,6 +101,7 @@ def closestPairBruteForce(P):
     return best_dist, best_pair[0], best_pair[1]
 
 def inputRandom(count, dimension, minVal, maxVal):
+    PATH = os.path.dirname(os.path.realpath(__file__))
     vectorList = []
     # Generate a list of random vectors with the specified number of dimensions
     for i in range(count):
@@ -105,7 +110,7 @@ def inputRandom(count, dimension, minVal, maxVal):
             vector += (random.randint(minVal, maxVal),)
         vectorList.append(vector)
     # Write the list of vectors to a file named "input.txt"
-    with open("input.txt", "w") as outFile:
+    with open(f"{PATH}/input/input.txt", "w") as outFile:
         outFile.write("Tuple\t:\t" + str(count) + "\n" + "Dimensi\t:\t" + str(dimension) + "\n")
         i = 1
         for vector in vectorList:
